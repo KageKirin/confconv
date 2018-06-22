@@ -45,8 +45,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input', help='input file', type=Path)
     parser.add_argument('-o', '--output', help='output file', type=Path)
-    parser.add_argument('-if', '--input-format', help='input format (overrides deduction by extension)')
-    parser.add_argument('-of', '--output-format', help='output format (overrides deduction by extension)')
+    parser.add_argument('-if', '--input-format', help='input format (overrides deduction by extension), supports: ' + ', '.join(loader.keys()))
+    parser.add_argument('-of', '--output-format', help='output format (overrides deduction by extension), supports: ' + ', '.join(dumper.keys()))
 
     args = parser.parse_args()
 
