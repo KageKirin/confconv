@@ -4,23 +4,28 @@ import os, sys
 import argparse, codecs
 from pathlib import Path
 
-import json, toml, toml, yaml #, config, yaml
+import json, toml, toml, yaml, configparser
+config = configparser.ConfigParser()
 from ruamel.yaml import YAML
 ry = YAML()
 
 loader = {
-    
+
     '.yaml' : yaml.load,
     '.json' : json.load,
     '.toml' : toml.load,
-    #'ini'  : config.load
+    '.ini'  : config.read_file
 }
 
+def writeini(d, f):
+    config.read_dict(d)
+    config.write(f)
+
 dumper = {
-    '.yaml' : yaml.dump,
-    '.json' : json.dumps,
-    '.toml' : toml.dumps,
-    #'ini'  : config.dumps
+    '.yaml' : lambda d, f: f.write(yaml.dump(d)),
+    '.json' : lambda d, f: f.write(json.dumps(d, sort_keys=True, indent=2)),
+    '.toml' : lambda d, f: f.write(toml.dumps(d)),
+    '.ini'  : lambda d, f: writeini(d,f)
 }
 
 def main(args):
@@ -31,8 +36,7 @@ def main(args):
     print(data)
 
     with codecs.open(args.output, 'w', encoding='utf-8') as outputfile:
-        d = dumper[args.output_format]
-        outputfile.write(d(data))
+        dumper[args.output_format](data, outputfile)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
