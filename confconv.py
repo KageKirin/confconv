@@ -4,7 +4,7 @@ import os, sys
 import argparse, codecs
 from pathlib import Path
 
-import json, toml, toml, yaml, configparser
+import json, toml, toml, yaml, configparser, xmltodict
 config = configparser.ConfigParser()
 from ruamel.yaml import YAML
 ry = YAML()
@@ -15,6 +15,7 @@ loader = {
     '.toml' : toml.load,
     '.ini'  : config.read_file,
     '.pyd'  : lambda f: eval(f.read()),
+    '.xml'  : lambda f: xmltodict.parse(f.read(), process_namespaces=True)
 }
 
 def writeini(d, f):
@@ -27,6 +28,7 @@ dumper = {
     '.toml' : lambda d, f: f.write(toml.dumps(d)),
     '.ini'  : lambda d, f: writeini(d,f),
     '.pyd'  : lambda d, f: f.write(str(d)),
+    '.xml'  : lambda d, f: f.write(xmltodict.unparse(d, pretty=True))
 }
 
 def main(args):
