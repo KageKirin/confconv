@@ -10,11 +10,11 @@ from ruamel.yaml import YAML
 ry = YAML()
 
 loader = {
-
     '.yaml' : yaml.load,
     '.json' : json.load,
     '.toml' : toml.load,
-    '.ini'  : config.read_file
+    '.ini'  : config.read_file,
+    '.pyd'  : lambda f: eval(f.read()),
 }
 
 def writeini(d, f):
@@ -25,7 +25,8 @@ dumper = {
     '.yaml' : lambda d, f: f.write(yaml.dump(d)),
     '.json' : lambda d, f: f.write(json.dumps(d, sort_keys=True, indent=2)),
     '.toml' : lambda d, f: f.write(toml.dumps(d)),
-    '.ini'  : lambda d, f: writeini(d,f)
+    '.ini'  : lambda d, f: writeini(d,f),
+    '.pyd'  : lambda d, f: f.write(str(d)),
 }
 
 def main(args):
