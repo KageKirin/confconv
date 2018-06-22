@@ -1,0 +1,7 @@
+# confconv requirements
+argparse
+pathlib
+ruamel.yaml
+toml
+config
+yaml
